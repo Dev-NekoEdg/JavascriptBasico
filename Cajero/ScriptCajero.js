@@ -24,35 +24,51 @@ boton.addEventListener("click", entregarDinero);
 
 
 function entregarDinero() {
-
     var input = document.getElementById("dinero");
     dinero = parseInt(input.value);
+    divivion = 0;
+    papeles = 0;
+    entregado = [];
 
-    for (const iterator of caja) {
+    for (const [i, iterator] of caja.entries()) {
         if (dinero > 0) {
             div = Math.floor(dinero / iterator.valor)
 
-            papeles = (div > iterator.cantidad ? iterator.cantidad : div) ;
+            papeles = (div > iterator.cantidad ? iterator.cantidad : div);
 
             entregado.push(new Billete(iterator.valor, papeles));
             dinero -= (iterator.valor * papeles);
+            caja[i].cantidad -= papeles;
         }
     }
+
+    console.log("caja modificada");
+    console.log(caja);
     if (dinero > 0) {
         console.log("no hay suficiente dinero para esa cantidad.");
         var texto = "<p style='color: red;'>no hay suficiente dinero para esa cantidad.</p>"
-        document.getElementById("resultado").append("<li>"+ texto +"</li>");
+        //document.getElementById("resultado").append("<li>" + texto + "</li>");
+        var ul = document.getElementById("resultado");
+        var li = document.createElement("li");
+        li.style("color: red");
+        li.appendChild(document.createTextNode(texto));
+        ul.appendChild(li);
     }
     else {
         console.log(entregado);
         for (const iterator of entregado) {
-            if(iterator.valor>0){
+            if (iterator.valor > 0) {
                 agregarItemLista(iterator.cantidad + "billetes de $" + iterator.valor);
             }
         }
     }
 }
 
-function agregarItemLista(texto){
-    document.getElementById("resultado").append("<li>"+ texto +"</li>");
+function agregarItemLista(texto) {
+    var ul = document.getElementById("resultado");
+    var li = document.createElement("li");
+    li.appendChild(document.createTextNode(texto));
+    ul.appendChild(li);
 }
+
+
